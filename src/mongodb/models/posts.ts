@@ -1,11 +1,11 @@
 import {Schema,model} from 'mongoose'
 
-const post = new Schema({
+const post_schema = new Schema({
     titulo:{
         type:String,
         trim:true,
-        index:true,
-        required:true
+        required:true,
+        text:true
     },
     url:{
         type:String,
@@ -15,7 +15,6 @@ const post = new Schema({
     keywords:String,
     contenido:{
         type:String,
-        index:true,
         required:true
     },
     html:String,
@@ -25,8 +24,9 @@ const post = new Schema({
     cover:String,
     tipo:{
         type:String,
-        index:true,
-        required:true
+        required:true,
+        trim:true,
+        text:true
     },
     estado:{
         type:String,
@@ -37,4 +37,4 @@ const post = new Schema({
     }
 },{timestamps:true,versionKey:false})
 
-export default model('Posts',post)
+export default model('Posts',post_schema)

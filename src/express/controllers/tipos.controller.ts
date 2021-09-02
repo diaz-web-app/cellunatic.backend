@@ -1,4 +1,5 @@
 import {RequestHandler} from 'express'
+import Posts from '../../mongodb/models/posts'
 import Post_tipos from '../../mongodb/models/post_tipos'
 import { crearURL } from '../../plugins/string_to_slug'
 
@@ -39,5 +40,13 @@ export const update_tipo:RequestHandler = async(req,res)=>{
 export const delete_tipo:RequestHandler = async(req,res)=>{
     const { _id } =  req.body
     const deleted = await Post_tipos.findByIdAndDelete(_id)
+    if(deleted){
+        const posts = await Posts.find({tipo:deleted.url})
+        if(posts.length > 0){
+            for(let post of posts){
+                await Posts.findByIdAndDelete(post._id)
+            }
+        }
+    }
     return res.json(deleted)
 }

@@ -7,6 +7,7 @@ import { posts_router } from './routes/posts.routes'
 import { tipos_router } from './routes/posts.tipos.routes'
 import { post_metas_router } from './routes/posts.metas.routes'
 import { categorias_router } from './routes/posts.categorias.routes'
+import { search_router } from './routes/search.routes'
 
 export class App{
     private app:Application
@@ -32,6 +33,7 @@ export class App{
         this.app.use(tipos_router)
         this.app.use(post_metas_router)
         this.app.use(categorias_router)
+        this.app.use(search_router)
     }
     async listen(){
         try{

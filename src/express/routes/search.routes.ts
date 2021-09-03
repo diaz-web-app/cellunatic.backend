@@ -1,17 +1,26 @@
 import {Router} from 'express'
 import Posts from '../../mongodb/models/posts'
+import post_metas from '../../mongodb/models/post_metas'
 const search_router = Router()
 
 search_router.get('/search/:text',async(req,res)=>{
+    let metas,posts
     try{
-        const posts = await Posts.find({
+        const total_posts = await Posts.find().countDocuments()
+        posts = await Posts.find({
             $text:{
                     $search:req.params.text
                 }
             }
         )
         if(posts.length > 0){
-            return res.status(200).json(posts)
+            if(posts.length > 0){
+                //consultamos los metas
+                for(let i = 0; i < posts.length;i++){
+                    metas = await post_metas.find({id_post:posts[i]._id})
+                }
+            }
+            return res.status(200).json({posts,metas,total_posts})
         }
         return res.status(404).json(posts)
     }catch(err){

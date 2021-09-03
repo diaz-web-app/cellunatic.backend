@@ -151,7 +151,7 @@ type CreateParams={
 export const create_post:RequestHandler = async(req,res)=>{
     const {post,post_metas,post_categorias}:CreateParams =  req.body
     if(!post || !post.titulo || !post.contenido || !post.tipo ){ // si no existen los parametros oblicatorios
-        console.log({post,post_metas,post_categorias})
+        
         return res.status(500).json({required:"titulo,contenido,tipo",provided:{post,post_metas,post_categorias}})
     }
 

@@ -1,17 +1,20 @@
 import {RequestHandler} from 'express'
-import { TMediaFile } from '../../interfaces/media_files.types'
 import Media_files from '../../mongodb/models/media_files'
 export const get_files:RequestHandler = async(req,res)=>{
     return
 }
 export const create_file:RequestHandler = async(req,res)=>{
-    const file:TMediaFile = req.file
-    file.url = req.file.path.replace('public','')
-    const new_file = await Media_files.create(file)
-    return res.json(new_file)
+    const {files}:any = req
+
+    for(let i=0;i<files.length;i++ ){
+        files[i].url = files[i].path.replace('public','')
+        await Media_files.create(files[i])
+    }
+    return res.json(files)
 }
 
 export const delete_file:RequestHandler = async(req,res)=>{
-    
-    return 
+    const {path} = req.body
+    const deleted = await Media_files.findOneAndDelete({path})
+    return res.json(deleted)
 }

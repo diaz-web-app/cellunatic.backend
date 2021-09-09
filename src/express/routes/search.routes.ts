@@ -3,16 +3,21 @@ import Posts from '../../mongodb/models/posts'
 import post_metas from '../../mongodb/models/post_metas'
 const search_router = Router()
 
-search_router.get('/search/:text',async(req,res)=>{
+search_router.get('/search/:text/:limite',async(req,res)=>{
     let metas,posts
     try{
-        const total_posts = await Posts.find().countDocuments()
+        const total_posts = await Posts.find({
+            $text:{
+                    $search:req.params.text
+                }
+            }
+        ).countDocuments()
         posts = await Posts.find({
             $text:{
                     $search:req.params.text
                 }
             }
-        )
+        ).limit(parseInt(req.params.limite))
         if(posts.length > 0){
             if(posts.length > 0){
                 //consultamos los metas

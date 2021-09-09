@@ -1,4 +1,4 @@
-import { TGetPostCategoria } from "./posts.categorias.types"
+import { TMediaFile } from "./media_files.types"
 import { TCreatePostMeta } from "./posts.metas.types"
 
 export type TGetPost={
@@ -20,6 +20,7 @@ export type TCreatePost={
     contenido:string
     tipo:string
     url:string
+    cover?:string
     categoria:string[]
 }
 export type TUpdatePost={
@@ -35,6 +36,7 @@ export type TUpdatePost={
         keywords?:string
     },
     post_metas:TCreatePostMeta[]
+    covers:TMediaFile[]
 }
 export type TDeletePost={
     _id:string

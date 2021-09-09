@@ -6,5 +6,6 @@ const router = Router()
 router.get('/',(_:Request,res:Response)=>{
     res.send('home')
 })
-router.post('/covers', upload_cover.single('cover'), file_ctrl.create_file)
+router.post('/covers', upload_cover.array('cover'), file_ctrl.create_file)
+router.delete('/covers', file_ctrl.delete_file)
 export default router

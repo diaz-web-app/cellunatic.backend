@@ -1,6 +1,8 @@
 import {RequestHandler} from 'express'
+import { TMediaFile } from '../../interfaces/media_files.types';
 import { TCreatePostMeta } from '../../interfaces/posts.metas.types';
 import { TCreatePost, TDeletePost, TUpdatePost } from '../../interfaces/posts.types';
+import media_files from '../../mongodb/models/media_files';
 import Posts from "../../mongodb/models/posts";
 import PostMetas from "../../mongodb/models/post_metas";
 import { crearURL } from '../../plugins/string_to_slug';
@@ -125,20 +127,22 @@ export const get_post:RequestHandler = async(req,res)=>{
         tipo,
         url
     } = req.params
-    let post,metas
+    let post,metas,covers
     if(url && tipo=='any'){ // solo el parametro url
         post = await Posts.findOne({url})
         if(post){
             metas = await PostMetas.find({id_post:post._id})
+            covers = await media_files.find({id_post:post._id})
         }
-        return res.json({post,metas})
+        return res.json({post,metas,covers})
     }
     if(url && tipo!=='any'){ // solo el parametro url
         post = await Posts.findOne({url,tipo})
         if(post){
             metas = await PostMetas.find({id_post:post._id})
+            covers = await media_files.find({id_post:post._id})
         }
-        return res.json({post,metas})
+        return res.json({post,metas,covers})
     }
     return res.status(404).json({msg:'not found'})
 }
@@ -147,17 +151,19 @@ type CreateParams={
     post:TCreatePost
     post_metas?:TCreatePostMeta[]
     post_categorias?:string[]
+    covers:TMediaFile[]
 }
 export const create_post:RequestHandler = async(req,res)=>{
-    const {post,post_metas,post_categorias}:CreateParams =  req.body
+    const {post,post_metas,post_categorias,covers}:CreateParams =  req.body
     if(!post || !post.titulo || !post.contenido || !post.tipo ){ // si no existen los parametros oblicatorios
         
-        return res.status(500).json({required:"titulo,contenido,tipo",provided:{post,post_metas,post_categorias}})
+        return res.status(500).json({required:"titulo,contenido,tipo",provided:{post,post_metas,post_categorias,covers}})
     }
 
     // si existen los parametros 
     const url = crearURL(post.titulo)
     const exist = await Posts.findOne({url})// comprobando si existe la url
+    post.cover = covers[0].url
     const metas = []
     let new_post
     
@@ -172,7 +178,9 @@ export const create_post:RequestHandler = async(req,res)=>{
                 metas.push(new_meta)
             }
         }
-
+        for(let cover of covers){ // se recorren los covers y se crean
+            await media_files.findOneAndUpdate({path:cover.path},{id_post:new_post._id})
+        }
         return res.json({new_post,metas})
     }
 
@@ -187,13 +195,15 @@ export const create_post:RequestHandler = async(req,res)=>{
             metas.push(new_meta)
         }
     }
-    
+    for(let cover of covers){ // se recorren los covers y se crean
+        await media_files.findOneAndUpdate({path:cover.path},{id_post:new_post._id})
+    }
     return res.json({new_post,metas})
     
 }
 
 export const update_post:RequestHandler = async(req,res)=>{
-    const {_id,post,post_metas}:TUpdatePost = req.body
+    const {_id,post,post_metas,covers}:TUpdatePost = req.body
     
     try{
         const post_updated = await Posts.findByIdAndUpdate(_id,post,{new:true})
@@ -207,6 +217,12 @@ export const update_post:RequestHandler = async(req,res)=>{
             for(let meta of post_metas){ // se recorren los nuevos metas y se crean            
                 await PostMetas.create<TCreatePostMeta>({id_post:_id,clave:meta.clave,contenido:meta.contenido})
             }
+            
+            if(covers.length >0){
+                for(let cover of covers){ // se recorren los covers y se crean
+                    await media_files.findOneAndUpdate({path:cover.path},{id_post:_id})
+                }
+            }
         }
         const metas = await PostMetas.find({id_post:_id})
         return res.json({post_updated,metas})
@@ -218,7 +234,7 @@ export const update_post:RequestHandler = async(req,res)=>{
 export const delete_post:RequestHandler = async(req,res)=>{
     const {_id}:TDeletePost = req.body
     try{
-        const post_deleted = await Posts.findByIdAndDelete(_id)
+        await Posts.findByIdAndDelete(_id)
         if(_id){
             const metas:any[] = PostMetas.find({id_post:_id})
             if(metas && metas.length > 0){

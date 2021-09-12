@@ -19,7 +19,7 @@ export const get_posts:RequestHandler = async(req,res)=>{
     if(!tipo && !estado && !categoria){ // si no hay parametros
         const total_posts = await Posts.find().countDocuments()
         
-        posts = await Posts.find().limit(limite?parseInt(limite):10)
+        posts = await Posts.find().sort({createdAt:-1}).limit(limite?parseInt(limite):10)
 
         if(posts.length > 0){
             //consultamos los metas
@@ -32,7 +32,7 @@ export const get_posts:RequestHandler = async(req,res)=>{
     if(tipo =='any' && estado=='any' && categoria=='any'){ // solo el parametro limite
         const total_posts = await Posts.find().countDocuments()
         
-        posts = await Posts.find().limit(limite?parseInt(limite):10)
+        posts = await Posts.find().sort({createdAt:-1}).limit(limite?parseInt(limite):10)
         if(posts.length > 0){
             for(let i = 0; i < posts.length;i++){ 
                 metas = await PostMetas.find({id_post:posts[i]._id})
@@ -44,7 +44,7 @@ export const get_posts:RequestHandler = async(req,res)=>{
     if(tipo !='any' && !estado && !categoria){ // solo el parametro tipo
         const total_posts = await Posts.find({tipo}).countDocuments()
         
-        posts = await Posts.find({tipo}).limit(limite?parseInt(limite):10)
+        posts = await Posts.find({tipo}).sort({createdAt:-1}).limit(limite?parseInt(limite):10)
         if(posts.length > 0){
             for(let i = 0; i < posts.length;i++){
                 metas = await PostMetas.find({id_post:posts[i]._id})
@@ -56,7 +56,7 @@ export const get_posts:RequestHandler = async(req,res)=>{
     if(tipo !='any' && estado =='any' && categoria=='any'){ // solo el parametro tipo
         const total_posts = await Posts.find({tipo}).countDocuments()
         
-        posts = await Posts.find({tipo}).limit(limite?parseInt(limite):10)
+        posts = await Posts.find({tipo}).sort({createdAt:-1}).limit(limite?parseInt(limite):10)
         if(posts.length > 0){
             for(let i = 0; i < posts.length;i++){
                 metas = await PostMetas.find({id_post:posts[i]._id})
@@ -68,7 +68,7 @@ export const get_posts:RequestHandler = async(req,res)=>{
     if(tipo == 'any' && estado !='any' && !categoria){ // solo el parametro estado o limite
         const total_posts = await Posts.find({estado}).countDocuments()
         
-        posts = await Posts.find({estado}).limit(limite?parseInt(limite):10)
+        posts = await Posts.find({estado}).sort({createdAt:-1}).limit(limite?parseInt(limite):10)
         if(posts.length > 0){
             for(let i = 0; i < posts.length;i++){
                 metas = await PostMetas.find({id_post:posts[i]._id})
@@ -79,7 +79,7 @@ export const get_posts:RequestHandler = async(req,res)=>{
     if(tipo == 'any' && estado !='any' && categoria == 'any'){ // solo el parametro estado o limite
         const total_posts = await Posts.find({estado}).countDocuments()
         
-        posts = await Posts.find({estado}).limit(limite?parseInt(limite):10)
+        posts = await Posts.find({estado}).sort({createdAt:-1}).limit(limite?parseInt(limite):10)
         if(posts.length > 0){
             for(let i = 0; i < posts.length;i++){
                 metas = await PostMetas.find({id_post:posts[i]._id})
@@ -90,7 +90,7 @@ export const get_posts:RequestHandler = async(req,res)=>{
     if(tipo == 'any' && estado =='any' && categoria !== 'any'){ // solo el parametro categoria o limite
         const total_posts = await Posts.find({categoria}).countDocuments()
         
-        posts = await Posts.find({categoria}).limit(limite?parseInt(limite):10)
+        posts = await Posts.find({categoria}).sort({createdAt:-1}).limit(limite?parseInt(limite):10)
         if(posts.length > 0){
             for(let i = 0; i < posts.length;i++){
                 metas = await PostMetas.find({id_post:posts[i]._id})
@@ -101,7 +101,7 @@ export const get_posts:RequestHandler = async(req,res)=>{
     if(tipo != 'any' && estado =='any' && categoria !== 'any'){ // solo el parametro categoria y tipo o limite
         const total_posts = await Posts.find({tipo,categoria}).countDocuments()
         
-        posts = await Posts.find({tipo,categoria}).limit(limite?parseInt(limite):10)
+        posts = await Posts.find({tipo,categoria}).sort({createdAt:-1}).limit(limite?parseInt(limite):10)
         if(posts.length > 0){
             for(let i = 0; i < posts.length;i++){
                 metas = await PostMetas.find({id_post:posts[i]._id})
@@ -112,7 +112,7 @@ export const get_posts:RequestHandler = async(req,res)=>{
     if(tipo != 'any' && estado !='any' && categoria != 'any'){ // si existe  tipo estado y categoria
         const total_posts = await Posts.find({tipo,estado,categoria}).countDocuments()
         
-        posts = await Posts.find({tipo,estado,categoria}).limit(limite?parseInt(limite):10)
+        posts = await Posts.find({tipo,estado,categoria}).sort({createdAt:-1}).limit(limite?parseInt(limite):10)
         if(posts.length > 0){
             for(let i = 0; i < posts.length;i++){
                 metas = await PostMetas.find({id_post:posts[i]._id})

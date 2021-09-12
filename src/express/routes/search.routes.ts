@@ -17,7 +17,7 @@ search_router.get('/search/:text/:limite',async(req,res)=>{
                     $search:req.params.text
                 }
             }
-        ).limit(parseInt(req.params.limite))
+        ).sort({createdAt:-1}).limit(parseInt(req.params.limite))
         if(posts.length > 0){
             if(posts.length > 0){
                 //consultamos los metas

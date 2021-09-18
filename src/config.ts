@@ -11,3 +11,8 @@ export const express={
             backend_cellunatic: process.env.CELLUNATIC_BACKEND_URI || "http://localhost:4000"
         }
     }
+export const cloudynary_api ={
+    cloud_name: 'diaz-web-app', 
+    api_key: '234879891383699', 
+    api_secret: 'zQHZmdTyDay3sVrSskMoC2S5rWU'
+}

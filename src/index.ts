@@ -19,7 +19,6 @@ async function main(){
         await Post_tipos.create({titulo,url})
     }
     const app = new App(express.port)
-    
     await app.listen()
 }
 

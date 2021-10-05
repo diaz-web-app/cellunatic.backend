@@ -2,14 +2,16 @@ export type TGetPostMeta={
     _id:string
     id_post:string
     clave:string
-    contenido:string
+    valor:string
+    vista:boolean
     createdAt:Date
     updatedAt:Date
 }
 export type TCreatePostMeta={
     id_post:string
     clave:string
-    contenido:string
+    valor:string
+    vista:boolean
 }
 export type TUpdatePostMeta={
     _id:string

@@ -13,15 +13,13 @@ const post_categoria = new Schema({
         required:true,
         trim:true
     },
-    tipo_post:[
-        {
-            type:String,
-            required:true,
-            trim:true
-        }
-    ],
-    contenido:String,
-    keywords:String
+    tipo_post:{
+        type:String,
+        required:true,
+        trim:true
+    },
+    meta_description:String,
+    meta_keywords:String
 },{timestamps:true,versionKey:false})
 
 export default model('PostCategorias',post_categoria)

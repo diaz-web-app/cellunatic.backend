@@ -155,9 +155,10 @@ type CreateParams={
 }
 export const create_post:RequestHandler = async(req,res)=>{
     const {post,post_metas,post_categorias,covers}:CreateParams =  req.body
-    if(!post || !post.titulo || !post.contenido || !post.tipo ){ // si no existen los parametros oblicatorios
+    console.log({post,post_metas,post_categorias,covers})
+    if(!post || !post.titulo || !post.meta_description || !post.tipo ){ // si no existen los parametros oblicatorios
         
-        return res.status(500).json({required:"titulo,contenido,tipo",provided:{post,post_metas,post_categorias,covers}})
+        return res.status(500).json({required:"titulo,meta_description,tipo",provided:{post,post_metas,post_categorias,covers}})
     }
 
     // si existen los parametros 
@@ -174,7 +175,7 @@ export const create_post:RequestHandler = async(req,res)=>{
 
         if(post_metas && post_metas.length > 0){ // se comprueba si existes metas
             for(let meta of post_metas){ // se recorren los metas y se crean
-                const new_meta = await PostMetas.create<TCreatePostMeta>({id_post:new_post._id,clave:meta.clave,contenido:meta.contenido})
+                const new_meta = await PostMetas.create<TCreatePostMeta>({id_post:new_post._id,clave:meta.clave,valor:meta.valor,vista:meta.vista})
                 metas.push(new_meta)
             }
         }
@@ -191,7 +192,7 @@ export const create_post:RequestHandler = async(req,res)=>{
 
     if(post_metas && post_metas.length > 0){ // se comprueba si existes metas
         for(let meta of post_metas){ // se recorren los metas y se crean
-            const new_meta = await PostMetas.create<TCreatePostMeta>({id_post:new_post._id,clave:meta.clave,contenido:meta.contenido})
+            const new_meta = await PostMetas.create<TCreatePostMeta>({id_post:new_post._id,clave:meta.clave,valor:meta.valor,vista:meta.vista})
             metas.push(new_meta)
         }
     }
@@ -215,7 +216,7 @@ export const update_post:RequestHandler = async(req,res)=>{
                 }
             }
             for(let meta of post_metas){ // se recorren los nuevos metas y se crean            
-                await PostMetas.create<TCreatePostMeta>({id_post:_id,clave:meta.clave,contenido:meta.contenido})
+                await PostMetas.create<TCreatePostMeta>({id_post:_id,clave:meta.clave,valor:meta.valor,vista:meta.vista})
             }
             
             if(covers.length >0){

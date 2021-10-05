@@ -12,8 +12,8 @@ const post_schema = new Schema({
         unique:true,
         required:true
     },
-    keywords:String,
-    contenido:{
+    meta_keywords:String,
+    meta_description:{
         type:String,
         required:true
     },
@@ -21,12 +21,16 @@ const post_schema = new Schema({
     categoria:[
         {type:String}
     ],
+    hijo:{
+        type:String
+    },
     cover:String,
     tipo:{
         type:String,
         required:true,
         trim:true,
-        text:true
+        text:true,
+        default:'post'
     },
     estado:{
         type:String,

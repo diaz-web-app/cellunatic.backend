@@ -6,8 +6,8 @@ export type TGetPost={
     estado:string
     _id:string
     titulo:string
-    keywords:string
-    contenido:string
+    meta_keywords:string
+    meta_description:string
     html:string
     tipo:string
     url:string
@@ -17,7 +17,7 @@ export type TGetPost={
 }
 export type TCreatePost={
     titulo:string
-    contenido:string
+    meta_description:string
     tipo:string
     url:string
     cover?:string
@@ -29,11 +29,11 @@ export type TUpdatePost={
         categoria?:string[]
         estado?:string
         titulo?:string
-        contenido?:string
+        meta_description?:string
         html?:string
         tipo?:string
         url?:string
-        keywords?:string
+        meta_keywords?:string
     },
     post_metas:TCreatePostMeta[]
     covers:TMediaFile[]

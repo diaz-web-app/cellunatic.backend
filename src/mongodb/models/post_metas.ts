@@ -11,10 +11,11 @@ const post_meta = new Schema({
         type:String,
         required:true
     },
-    contenido:{
+    valor:{
         type:String,
         index:true
-    }
+    },
+    vista:Boolean
 },{timestamps:true,versionKey:false})
 
 export default model('Post_metas',post_meta)

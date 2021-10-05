@@ -19,9 +19,9 @@ export const get_metas:RequestHandler = async(req,res)=>{
     return res.json(metas)
 }
 export const create_meta:RequestHandler = async(req,res)=>{
-    const {id_post,clave,contenido} =  req.body
+    const {id_post,clave,meta_description} =  req.body
     try{
-        const meta_created = await post_metas.create({id_post,clave,contenido})
+        const meta_created = await post_metas.create({id_post,clave,meta_description})
         return res.json(meta_created)
     }catch(err){
         console.error(err)

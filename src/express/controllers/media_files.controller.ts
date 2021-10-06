@@ -38,6 +38,7 @@ export const create_file:RequestHandler = async(req,res)=>{
 
 export const delete_file:RequestHandler = async(req,res)=>{
     const {path} = req.body
+    await promises.unlink(path)
     const deleted = await Media_files.findOneAndDelete({path})
     return res.json(deleted)
 }
